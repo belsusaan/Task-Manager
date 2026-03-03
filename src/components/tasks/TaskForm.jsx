@@ -27,6 +27,7 @@ export default function TaskForm({ onClose, taskToEdit = null }) {
   const onSubmit = async (data) => {
     setLoading(true);
     setError("");
+
     const taskData = {
       ...data,
       // Convertir string de fecha a objeto Date (o null si está vacío)
@@ -35,11 +36,11 @@ export default function TaskForm({ onClose, taskToEdit = null }) {
 
     const result = await createTask(user.uid, taskData);
     if (result.success) {
-      toast.success("Tarea creada");
+      toast.success("Tarea guardada");
       onClose(); // Cerrar formulario al crear exitosamente
     } else {
       setError("Error al crear la tarea");
-      toast.error("Error al crear la tarea");
+      toast.error("Error al guardar la tarea");
     }
 
     setLoading(false);

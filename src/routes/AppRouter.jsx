@@ -44,7 +44,7 @@ export default function AppRouter() {
         >
           {/* Rutas hijas que comparten el Layout (Navbar) */}
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="tasks/: taskId" element={<TaskDetails />} />
+          <Route path="tasks/:taskId" element={<TaskDetails />} />
         </Route>
 
         {/* Ruta 404: cualquier ruta no definida vuelve a dashboard */}
