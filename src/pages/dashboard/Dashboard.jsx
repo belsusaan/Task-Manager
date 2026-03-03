@@ -5,6 +5,7 @@ import TaskFilters from "../../components/tasks/TaskFilters";
 import TaskList from "../../components/tasks/TaskList";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import { useUIStore } from "../../store/uiStore";
+import TaskStats from "../../components/tasks/TaskStats";
 
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user);
@@ -44,6 +45,7 @@ export default function Dashboard() {
           >
             Bienvenido, {user?.displayName || "Usuario"}
           </h1>
+
           <p
             className={`mt-2 text-lg ${
               isDark ? "text-slate-400" : "text-gray-600"
@@ -51,6 +53,7 @@ export default function Dashboard() {
           >
             Tienes {tasks.filter((t) => !t.completed).length} tareas pendientes
           </p>
+          <TaskStats />
         </div>
 
         <TaskFilters />

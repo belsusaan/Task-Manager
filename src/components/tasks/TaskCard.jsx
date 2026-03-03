@@ -51,7 +51,7 @@ export default function TaskCard({ task }) {
   return (
     <Link to={`/tasks/${task.id}`} className="block">
       <div
-        className={`card hover:shadow-lg transition-shadow p-5 rounded-lg bg-white ${task.completed ? "opacity-60 " : ""} ${taskIsOverdue ? "border-red-700" : "border-gray-300"} }`}
+        className={`card hover:shadow-lg transition-shadow p-5 rounded-lg bg-white ${task.completed ? "opacity-60 " : ""} ${taskIsOverdue ? "border-red-700" : "border-gray-300"}`}
       >
         <div className="flex justify-between items-center gap-4 mb-4">
           <h4
