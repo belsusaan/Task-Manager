@@ -2,6 +2,7 @@ import { useTaskStore } from "../../store/taskStore";
 import { FILTERS, CATEGORIES } from "../../utils/constants";
 
 export default function TaskFilters() {
+  const { searchQuery, setSearchQuery } = useTaskStore();
   const { currentFilter, currentCategory, setFilter, setCategory } =
     useTaskStore();
   return (
@@ -47,6 +48,16 @@ export default function TaskFilters() {
             ))}
           </select>
         </div>
+
+        {/* Buscar */}
+
+        <input
+          type="text"
+          className="input-field"
+          placeholder="Ej: comprar pan dulce"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
     </div>
   );

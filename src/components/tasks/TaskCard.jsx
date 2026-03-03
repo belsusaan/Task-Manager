@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { updateTask, deleteTask } from "../../services/taskService";
 import { CATEGORIES } from "../../utils/constants";
 import { getDueDateLabel, isOverdue } from "../../utils/dateHelpers";
+import toast from "react-hot-toast";
 
 export default function TaskCard({ task }) {
   const category = CATEGORIES.find(
@@ -24,8 +25,9 @@ export default function TaskCard({ task }) {
     // TODO: Implementar toggle de completado
     try {
       await updateTask(task.id, { completed: !task.completed });
+      toast.success("Tarea actualizada");
     } catch (error) {
-      window.alert("Error al actualizar la tarea.");
+      toast.success("Error al actualizar la tarea.");
     }
   };
 
@@ -39,8 +41,9 @@ export default function TaskCard({ task }) {
     if (deleteConfirmed) {
       try {
         await deleteTask(task.id);
+        toast.success("Tarea eliminada");
       } catch (error) {
-        window.alert("No se pudo eliminar la tarea");
+        toast.error("No se pudo eliminar la tarea");
       }
     }
   };
@@ -71,7 +74,7 @@ export default function TaskCard({ task }) {
           </p>
         )}
 
-        <div className="flex justify-between items-center text-sm mb-4 font-medium bg-gray-100 p-2 rounded">
+        <div className="flex justify-between items-center text-sm mb-4 font-medium ">
           <span
             className={`${task.isOverdue ? "text-red-700 font-bold" : "text-gray-700 font-bold"}`}
           >

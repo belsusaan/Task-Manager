@@ -8,10 +8,13 @@ import { useUIStore } from "../../store/uiStore";
 
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user);
-  const { tasks, currentFilter, currentCategory, loading } = useTaskStore();
+  const { tasks, currentFilter, currentCategory, searchQuery, loading } =
+    useTaskStore();
 
   // Hook que se suscribe a las tareas en tiempo real
   useTasks();
+  const { theme } = useUIStore();
+  const isDark = theme === "dark";
 
   // Aplicar filtros seleccionados
   const filteredTasks = tasks.filter((task) => {
@@ -19,11 +22,12 @@ export default function Dashboard() {
     if (currentFilter === "pending" && task.completed) return false;
     if (currentCategory !== "all" && task.category !== currentCategory)
       return false;
-    return true;
+    const query = searchQuery.toLowerCase() || "";
+    const resultados =
+      task.title.toLowerCase().includes(query) ||
+      task.description?.toLowerCase().includes(query);
+    return resultados;
   });
-
-  const { theme } = useUIStore();
-  const isDark = theme === "dark";
 
   if (loading) {
     return <LoadingSpinner />;
