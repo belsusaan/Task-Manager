@@ -16,6 +16,7 @@ export default function Navbar() {
   };
 
   const { theme, toggleTheme } = useUIStore();
+  const isDark = theme === "dark";
 
   return (
     <nav
@@ -40,8 +41,10 @@ export default function Navbar() {
             </button>
           </div>
           {/* Usuario y botón de logout */}
-          <div className="flex items-center gap-4">
-            <span className="text-gray-700">
+          <div className={`flex items-center gap-4 `}>
+            <span
+              className={`text-gray-700 ${isDark ? " text-white" : "text-gray-900"}`}
+            >
               {user?.displayName || user?.email}
             </span>
             <button onClick={handleLogout} className="btn-secondary">

@@ -13,8 +13,12 @@ import {
 } from "../../utils/dateHelpers";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import TaskForm from "../../components/tasks/TaskForm";
+import { useUIStore } from "../../store/uiStore";
 
 export default function TaskDetails() {
+  const { theme } = useUIStore();
+  const isDark = theme === "dark";
+
   const { taskId } = useParams(); // Obtener ID de la URL
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
@@ -42,6 +46,7 @@ export default function TaskDetails() {
   const handleToggleComplete = async () => {
     const result = await updateTask(taskId, {
       completed: !task.completed,
+      userId: task.userId,
     });
 
     if (result.success) {
@@ -63,6 +68,10 @@ export default function TaskDetails() {
     return <LoadingSpinner />;
   }
 
+  if (!task) {
+    return null;
+  }
+
   // Mostrar formulario de edición si editing es true
   if (editing) {
     return (
@@ -72,17 +81,24 @@ export default function TaskDetails() {
           onClose={() => {
             setEditing(false);
             loadTask(); // Recargar tarea actualizada
+            navigate("/dashboard");
           }}
         />
       </div>
     );
   }
 
-  const category = CATEGORIES.find((c) => c.id === task.category);
-  const priority = PRIORITIES.find((p) => p.id === task.priority);
+  const category = CATEGORIES.find(
+    (c) => String(c.id) === String(task.category),
+  );
+  const priority = PRIORITIES.find(
+    (p) => String(p.id) === String(task.priority),
+  );
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div
+      className={`max-w-4xl mx-auto p-6 ${isDark ? "!bg-gray-900 " : "bg-gray-50 "}`}
+    >
       {/* Breadcrumb */}
       <div className="mb-6">
         <Link
@@ -92,11 +108,15 @@ export default function TaskDetails() {
           Volver al Dashboard
         </Link>
       </div>
-      <div className="card">
+      <div
+        className={`card  ${isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}
+      >
         {/* Header con título y botones */}
         <div className="flex justify-between items-start mb-6">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            <h1
+              className={`text-3xl font-bold mb-2  ${isDark ? " text-white" : " text-gray-800"}`}
+            >
               {task.title}
             </h1>
             {/* Badges de categoría, prioridad y estado */}
@@ -147,32 +167,40 @@ export default function TaskDetails() {
 
         {/* Descripción */}
         <div className="border-t pt-6">
-          <h2 className="text-lg font-semibold text-gray-700 mb-2">
+          <h2
+            className={`text-lg font-semibold mb-2  ${isDark ? "text-white" : " text-gray-700"}`}
+          >
             Descripción
           </h2>
-          <p className="text-gray-600 whitespace-pre-wrap">
+          <p
+            className={`whitespace-pre-wrap  ${isDark ? " text-white" : " text-gray-600"} wrap-break-word`}
+          >
             {task.description || "Sin descripción"}
           </p>
         </div>
 
         {/* Información adicional */}
         <div className="border-t pt-6 mt-6">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">
+          <h2
+            className={`text-lg font-semibold mb-4  ${isDark ? "text-white" : " text-gray-700"}`}
+          >
             Información adicional
           </h2>
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <dt className="text-sm font-medium text-gray-500">Creada</dt>
-              <dd className="text-gray-900">
+              <dd className={`${isDark ? " text-white" : " text-gray-900"}`}>
                 {formatDateTime(task.createdAt)}
               </dd>
             </div>
             {task.dueDate && (
               <div>
-                <dt className="text-sm font-medium text-gray-500">
+                <dt
+                  className={` text-sm font-medium ${isDark ? " text-white" : " text-gray-500"}`}
+                >
                   Fecha de vencimiento
                 </dt>
-                <dd className="text-gray-900">
+                <dd className={`${isDark ? " text-white" : " text-gray-900"}`}>
                   {formatDateTime(task.dueDate)}
                 </dd>
               </div>
